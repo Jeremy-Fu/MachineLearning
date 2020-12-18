@@ -1,0 +1,6 @@
+
+plugins {
+    id 'machine-learning.java-common-conventions'
+
+    id 'java-library'
+}
