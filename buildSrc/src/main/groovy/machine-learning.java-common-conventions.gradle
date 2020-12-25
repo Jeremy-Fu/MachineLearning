@@ -1,6 +1,7 @@
 
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 repositories {
@@ -14,4 +15,14 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+    dependsOn test // tests are required to run before generating the report
 }
