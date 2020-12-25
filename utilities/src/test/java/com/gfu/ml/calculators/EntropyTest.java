@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
  */
-public class EntropyCalculatorTest {
+public class EntropyTest {
 
     @Test
     public void testGetEntropy() {
-        final EntropyCalculator calculator = new EntropyCalculator();
+        final Entropy calculator = new Entropy();
         final int democrats = 15;
         final int republicans = 13;
         for (int i = 0; i < democrats; i++) {

@@ -11,17 +11,17 @@ import static java.lang.String.format;
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
  */
-public class EntropyCalculator {
+public class Entropy {
 
-    private static final Logger logger = LogManager.getLogger(EntropyCalculator.class);
+    private static final Logger logger = LogManager.getLogger(Entropy.class);
     private final Map<Boolean, Integer> labelsCounter;
     private int total;
 
-    public EntropyCalculator() {
+    public Entropy() {
         this.labelsCounter = new HashMap<>();
     }
 
-    public EntropyCalculator digest(final boolean output) {
+    public Entropy digest(final boolean output) {
         int counter = labelsCounter.getOrDefault(output, 0);
         labelsCounter.put(output, counter+1);
         total++;
