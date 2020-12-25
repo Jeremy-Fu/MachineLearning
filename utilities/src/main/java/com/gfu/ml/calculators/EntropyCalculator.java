@@ -14,33 +14,33 @@ import static java.lang.String.format;
 public class EntropyCalculator {
 
     private static final Logger logger = LogManager.getLogger(EntropyCalculator.class);
-    private final Map<Integer, Integer> labelsCounter;
+    private final Map<Boolean, Integer> labelsCounter;
     private int total;
 
     public EntropyCalculator() {
         this.labelsCounter = new HashMap<>();
     }
 
-    public EntropyCalculator digest(final int label) {
-        int counter = labelsCounter.getOrDefault(label, 0);
-        labelsCounter.put(label, counter+1);
+    public EntropyCalculator digest(final boolean output) {
+        int counter = labelsCounter.getOrDefault(output, 0);
+        labelsCounter.put(output, counter+1);
         total++;
-        logger.trace(format("digest[%d]: %d", label, labelsCounter.get(label)));
+        logger.trace(format("digest[%s]: %d", output, labelsCounter.get(output)));
         return this;
     }
 
     public double getEntropy() {
         double entropy = 0;
-        for (final Integer label : labelsCounter.keySet()) {
-            final double probability = getProbability(label);
-            logger.trace(format("getEntropy: P[Y=%d]=%f", label, probability));
+        for (final Boolean output : labelsCounter.keySet()) {
+            final double probability = getProbability(output);
+            logger.trace(format("getEntropy: P[Y=%s]=%f", output, probability));
             entropy -= probability * (Math.log(probability) / Math.log(2));
         }
         return entropy;
     }
 
-    private double getProbability(final int label) {
-        final int occurrence = labelsCounter.getOrDefault(label, 0);
+    private double getProbability(final boolean output) {
+        final int occurrence = labelsCounter.getOrDefault(output, 0);
         return ((double) occurrence) / (double) total;
     }
 }

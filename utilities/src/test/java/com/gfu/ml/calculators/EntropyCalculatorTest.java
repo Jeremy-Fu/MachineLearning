@@ -15,10 +15,10 @@ public class EntropyCalculatorTest {
         final int democrats = 15;
         final int republicans = 13;
         for (int i = 0; i < democrats; i++) {
-            calculator.digest(0);
+            calculator.digest(false);
         }
         for (int i = 0; i < republicans; i++) {
-            calculator.digest(1);
+            calculator.digest(true);
         }
         assertTrue(Math.abs(calculator.getEntropy() - 0.996316519559) < 0.0000000000001);
     }
