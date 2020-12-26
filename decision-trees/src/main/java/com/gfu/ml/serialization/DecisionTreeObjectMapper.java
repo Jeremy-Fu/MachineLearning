@@ -4,7 +4,10 @@ import com.gfu.ml.model.DTBinaryLeaf;
 import com.gfu.ml.model.DTBinaryBranchNode;
 import com.gfu.ml.model.DTBinaryNode;
 import com.gfu.ml.model.DecisionTree;
+import com.google.common.base.Joiner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import static java.lang.String.format;
@@ -25,11 +28,20 @@ import static java.lang.String.format;
  */
 public class DecisionTreeObjectMapper {
 
+    private static final Joiner joiner = Joiner.on(",");
+
     public static DecisionTree deserialize(
             final String serialization
     ) {
         final String[] nodes = serialization.split(",");
         return new DecisionTree(deserialize(nodes));
+    }
+
+    public static String serialize(final DecisionTree tree) {
+        final List<DTBinaryNode> visited = new ArrayList<>();
+        traverse(tree.getRoot(), visited);
+        return joiner.join(visited);
+
     }
 
     private static DTBinaryNode deserialize(final String[] nodes) {
@@ -62,6 +74,18 @@ public class DecisionTreeObjectMapper {
             }
         }
         return root;
+    }
+
+    private static void traverse(final DTBinaryNode root, List<DTBinaryNode> visited) {
+        if (root == null) {
+            throw new Error("The root is null");
+        }
+        visited.add(root);
+        if (root instanceof DTBinaryLeaf) {
+            return;
+        }
+        traverse(root.getNegative(), visited);
+        traverse(root.getPositive(), visited);
     }
 
     private static DTBinaryNode parse(final String node) {

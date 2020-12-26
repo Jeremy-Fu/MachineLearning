@@ -102,7 +102,6 @@ public class TrainerTest {
         final Trainer trainer = new Trainer(infoGain, 3);
         wrangler.replayAll();
         final DecisionTree dt = trainer.train(dataSet);
-        assertEquals(2, dt.getDepth(), "The depth of decision tree should be 2");
         final DecisionTree expected = DecisionTreeObjectMapper.deserialize("attr2,leaf:false,leaf:true");
         assertEquals(expected, dt);
         wrangler.verifyAll();

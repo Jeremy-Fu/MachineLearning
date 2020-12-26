@@ -40,4 +40,9 @@ public class DTBinaryLeaf implements DTBinaryNode {
         return this.prediction == that.prediction;
     }
 
+    @Override
+    public String toString() {
+        return "leaf:" + prediction;
+    }
+
 }

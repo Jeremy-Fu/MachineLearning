@@ -56,4 +56,9 @@ public class DTBinaryBranchNode implements DTBinaryNode {
         }
         return this.negative.equals(that.negative) && this.positive.equals(that.positive);
     }
+
+    @Override
+    public String toString() {
+        return attribute;
+    }
 }

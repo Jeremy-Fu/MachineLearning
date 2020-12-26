@@ -1,7 +1,11 @@
 package com.gfu.ml.data;
 
+import com.google.common.annotations.VisibleForTesting;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 
 /**
@@ -37,7 +41,7 @@ public class DataSet {
         this.rows = rows;
     }
 
-    DataSet(
+    private DataSet(
             final int[] attributes,
             final String[] attributeNames,
             final boolean[][] matrix,
@@ -73,8 +77,8 @@ public class DataSet {
         return positives > negatives;
     }
 
-    public String getAttribute(final int attrIdx) {
-        return attributeNames[attrIdx];
+    public String getAttribute(final int idx) {
+        return attributeNames[attributes[idx]];
     }
 
     public int attributesCount() {
@@ -97,52 +101,42 @@ public class DataSet {
         return matrix[rowIdx][outIdx];
     }
 
-    /**
-     * [attr0, attr1, ..., attrN-1, Y]
-     *
-     * @return
-     */
-    boolean[][] getData() {
-        final int outputIdx = matrix[0].length-1;
-        final boolean[][] copy = new boolean[rows.length][attributes.length+1];
-        for (int i = 0; i < rows.length; i++) {
-            for (int j = 0; j < attributes.length; j++) {
-                copy[i][j] = matrix[rows[i]][attributes[j]];
-            }
-            copy[i][attributes.length] = matrix[i][outputIdx];
-        }
-        return copy;
-    }
-
-
     public DataSet[] split(final int attrIdx) {
         if (attributes.length == 0) {
             throw new Error(String.format("there is only one attribute in current dataset. "));
         }
 
         final int[] newAttributes = new int[attributes.length-1];
-        final String[] nAttributeNames = new String[attributes.length-1];
         for (int i = 0, j = 0; i < attributes.length; i++) {
-            if (attributes[i] == attrIdx) {
+            if (i == attrIdx) {
                 continue;
             }
-            newAttributes[j] = attributes[i];
-            nAttributeNames[j++] = attributeNames[i];
+
+            newAttributes[j++] = attributes[i];
         }
 
         final List<Integer> row0 = new ArrayList<>();
         final List<Integer> row1 = new ArrayList<>();
         for (int i = 0; i < rows.length; i++) {
-            if (!matrix[i][attrIdx]) {
-                row0.add(i);
+            if (!matrix[rows[i]][attributes[attrIdx]]) {
+                row0.add(rows[i]);
             } else {
-                row1.add(i);
+                row1.add(rows[i]);
             }
         }
 
-        final DataSet dataSet0 = new DataSet(newAttributes, nAttributeNames, matrix, toArray(row0));
-        final DataSet dataSet1 = new DataSet(newAttributes, nAttributeNames, matrix, toArray(row1));
+        final DataSet dataSet0 = new DataSet(newAttributes, attributeNames, matrix, toArray(row0));
+        final DataSet dataSet1 = new DataSet(newAttributes, attributeNames, matrix, toArray(row1));
         return new DataSet[] {dataSet0, dataSet1};
+    }
+
+    public static Builder builder(final String[] attributeNames) {
+        return new Builder(attributeNames);
+    }
+
+    @VisibleForTesting
+    int getAttributesCount() {
+        return attributes.length;
     }
 
     private static int[] toArray(final List<Integer> rowL) {
@@ -151,6 +145,44 @@ public class DataSet {
             rowA[i] = rowL.get(i);
         }
         return rowA;
+    }
+
+    public static class Builder {
+        private final List<List<Boolean>> data;
+        private final String[] attributeNames;
+
+        private Builder(final String[] attributeNames) {
+            data = new ArrayList<>();
+            this.attributeNames = attributeNames;
+        }
+
+        public Builder addRow(
+                final String row,
+                final Function<String[], List<Boolean>> attrConverter,
+                final Function<String[], Boolean> outputConverter
+        ) {
+            final String[] fields = row.split(",");
+            final String[] trimmedFields = Arrays.stream(fields)
+                    .map(String::trim)
+                    .toArray(String[]::new);
+            final List<Boolean> attributes = attrConverter.apply(trimmedFields);
+            attributes.add(outputConverter.apply(trimmedFields));
+            data.add(attributes);
+            return this;
+        }
+
+        public DataSet build() {
+            final int rows = data.size();
+            final int columns = attributeNames.length+1;
+            final boolean[][] matrix = new boolean[rows][columns];
+            for (int i = 0; i < rows; i++) {
+                final List<Boolean> row = data.get(i);
+                for (int j = 0; j < columns; j++) {
+                    matrix[i][j] = row.get(j);
+                }
+            }
+            return new DataSet(matrix, attributeNames);
+        }
     }
 
 }

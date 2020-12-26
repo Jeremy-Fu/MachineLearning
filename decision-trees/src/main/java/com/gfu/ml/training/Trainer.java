@@ -34,7 +34,7 @@ public class Trainer {
             final int depth
     ) {
         final int attributesCount = dataSet.attributesCount();
-        if (dataSet.isConverged() || attributesCount == 1 || depth == maxDepth) {
+        if (dataSet.isConverged() || attributesCount <= 1 || depth == maxDepth) {
             final DTBinaryLeaf leaf = new DTBinaryLeaf(dataSet.getMajority());
             return leaf;
         }
