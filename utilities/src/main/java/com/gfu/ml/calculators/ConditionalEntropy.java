@@ -6,6 +6,7 @@ package com.gfu.ml.calculators;
 public class ConditionalEntropy {
 
     private final Counter counter = new Counter();
+    private final double DELTA = 1e-10;
 
     public ConditionalEntropy digest(
             final boolean attributeValue,
@@ -34,13 +35,21 @@ public class ConditionalEntropy {
         final int c0 = counter.getCount(attributeValue, false); // C[Y=0|X=x]
         final int c1 = counter.getCount(attributeValue, true); // C[Y=0|X=x]
 
-        final double p0 = (double)c0 / (double)(c0 + c1); // C[Y=0|X=x]
-        final double p1 = (double)c1 / (double)(c0 + c1); // C[Y=1|X=x]
+        final double p0 = offset((double)c0 / (double)(c0 + c1)); // C[Y=0|X=x]
+        final double p1 = offset((double)c1 / (double)(c0 + c1)); // C[Y=1|X=x]
 
         double scEntropy = 0;
         scEntropy -= p0 * Math.log(p0) / Math.log(2);
         scEntropy -= p1 * Math.log(p1) / Math.log(2);
         return scEntropy;
+    }
+
+    private double offset(final double probability) {
+        if (0 == probability) {
+            return DELTA;
+        } else {
+            return probability;
+        }
     }
 
     private static class Counter {
