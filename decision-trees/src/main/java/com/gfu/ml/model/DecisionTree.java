@@ -1,5 +1,7 @@
 package com.gfu.ml.model;
 
+import java.util.Map;
+
 import static java.lang.Math.max;
 
 /**
@@ -17,6 +19,10 @@ public class DecisionTree {
         return getDepth(root);
     }
 
+    public boolean predict(final Map<String, Boolean> attributes) {
+        return search(attributes, root);
+    }
+
     @Override
     public boolean equals(final Object object) {
         if (!(object instanceof DecisionTree)) {
@@ -32,6 +38,18 @@ public class DecisionTree {
             return 1;
         }
         return 1 + max(getDepth(node.getNegative()), getDepth(node.getPositive()));
+    }
+
+    private boolean search(final Map<String, Boolean> attributes, final DTBinaryNode curr) {
+        if (curr instanceof DTBinaryLeaf) {
+            return curr.getPrediction();
+        }
+        final String attribute = curr.getAttribute();
+        if (attributes.get(attribute)) {
+            return search(attributes, curr.getPositive());
+        } else {
+            return search(attributes, curr.getNegative());
+        }
     }
 
 }
