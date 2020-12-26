@@ -29,7 +29,7 @@ public class Entropy {
         return this;
     }
 
-    public double getEntropy() {
+    public double value() {
         double entropy = 0;
         for (final Boolean output : labelsCounter.keySet()) {
             final double probability = getProbability(output);

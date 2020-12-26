@@ -2,7 +2,8 @@ package com.gfu.ml.calculators;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.gfu.ml.calculators.Constants.DELTA;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
@@ -21,6 +22,6 @@ public class ErrorRateTest {
             errorRate.digest(0);
         }
 
-        assertTrue(Math.abs(errorRate.getErrorRate() - 0.464285714286) < 0.000000000001);
+        assertEquals(0.464285714286, errorRate.getErrorRate(), DELTA);
     }
 }

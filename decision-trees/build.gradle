@@ -9,6 +9,4 @@ dependencies {
     implementation 'com.google.guava:guava:30.1-jre'
     implementation project(':utilities')
 
-    testImplementation 'org.easymock:easymock:3.1'
-
 }

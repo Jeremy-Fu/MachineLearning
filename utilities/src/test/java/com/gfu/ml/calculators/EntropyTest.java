@@ -2,7 +2,8 @@ package com.gfu.ml.calculators;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.gfu.ml.calculators.Constants.DELTA;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
@@ -20,6 +21,6 @@ public class EntropyTest {
         for (int i = 0; i < republicans; i++) {
             calculator.digest(true);
         }
-        assertTrue(Math.abs(calculator.getEntropy() - 0.996316519559) < 0.0000000000001);
+        assertEquals( 0.996316519559, calculator.value(), DELTA);
     }
 }

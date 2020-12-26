@@ -47,13 +47,4 @@ public class DecisionTreeObjectMapperTest {
             DecisionTreeObjectMapper.deserialize("attr1,leaf:true:abc");
         });
     }
-
-    @Test
-    public void testDeserializeIllegalInputNotBoolean() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            DecisionTreeObjectMapper.deserialize("attr1,leaf:abc");
-        });
-    }
-
-
 }
