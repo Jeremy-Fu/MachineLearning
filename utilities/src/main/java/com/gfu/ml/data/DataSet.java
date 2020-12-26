@@ -81,6 +81,22 @@ public class DataSet {
         return attributes.length;
     }
 
+    public int getRowsCount() {
+        return rows.length;
+    }
+
+    public boolean attrValue(final int row, final int attr) {
+        final int rowIdx = rows[row];
+        final int attrIdx = attributes[attr];
+        return matrix[rowIdx][attrIdx];
+    }
+
+    public boolean outValue(final int row) {
+        final int rowIdx = rows[row];
+        final int outIdx = matrix[0].length-1;
+        return matrix[rowIdx][outIdx];
+    }
+
     /**
      * [attr0, attr1, ..., attrN-1, Y]
      *

@@ -1,5 +1,7 @@
 package com.gfu.ml.calculators;
 
+import com.gfu.ml.data.DataSet;
+
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
  */
@@ -14,6 +16,13 @@ public class MutualInformation {
     ) {
         this.e = e;
         this.ce = ce;
+    }
+
+    public double calculate(final DataSet dataSet, final int attrIdx) {
+        for (int i = 0; i < dataSet.getRowsCount(); i++) {
+            digest(dataSet.attrValue(i, attrIdx), dataSet.outValue(i));
+        }
+        return value();
     }
 
     public MutualInformation digest(final boolean attrValue, final boolean outValue) {

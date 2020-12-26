@@ -1,6 +1,6 @@
 package com.gfu.ml.training;
 
-import com.gfu.ml.criterion.InfoGain;
+import com.gfu.ml.calculators.MutualInformation;
 import com.gfu.ml.data.DataSet;
 import com.gfu.ml.model.DecisionTree;
 import com.gfu.ml.serialization.DecisionTreeObjectMapper;
@@ -22,7 +22,7 @@ public class TrainerTest {
 
     @Test
     public void testTrainConverge() {
-        final InfoGain infoGain = wrangler.createMock(InfoGain.class);
+        final MutualInformation infoGain = wrangler.createMock(MutualInformation.class);
         final DataSet dataSet = wrangler.createMock(DataSet.class);
 
         expect(dataSet.attributesCount()).andReturn(3);
@@ -39,7 +39,7 @@ public class TrainerTest {
 
     @Test
     public void testTrain0Layer() {
-        final InfoGain infoGain = wrangler.createMock(InfoGain.class);
+        final MutualInformation infoGain = wrangler.createMock(MutualInformation.class);
         final DataSet dataSet = wrangler.createMock(DataSet.class);
 
         expect(dataSet.isConverged()).andReturn(false);
@@ -56,7 +56,7 @@ public class TrainerTest {
 
     @Test
     public void testTrain1Attribute() {
-        final InfoGain infoGain = wrangler.createMock(InfoGain.class);
+        final MutualInformation infoGain = wrangler.createMock(MutualInformation.class);
         final DataSet dataSet = wrangler.createMock(DataSet.class);
 
         expect(dataSet.attributesCount()).andReturn(1);
@@ -75,7 +75,7 @@ public class TrainerTest {
     @Test
     public void testTrainOneLayer() {
         // "attr2,leaf:false,leaf:true"
-        final InfoGain infoGain = wrangler.createMock(InfoGain.class);
+        final MutualInformation infoGain = wrangler.createMock(MutualInformation.class);
         final DataSet dataSet = wrangler.createMock(DataSet.class);
 
         expect(dataSet.isConverged()).andReturn(false);

@@ -1,6 +1,6 @@
 package com.gfu.ml.training;
 
-import com.gfu.ml.criterion.InfoGain;
+import com.gfu.ml.calculators.MutualInformation;
 import com.gfu.ml.data.DataSet;
 import com.gfu.ml.model.DTBinaryLeaf;
 import com.gfu.ml.model.DTBinaryBranchNode;
@@ -12,11 +12,11 @@ import com.gfu.ml.model.DecisionTree;
  */
 public class Trainer {
 
-    private final InfoGain calculator;
+    private final MutualInformation calculator;
     private final int maxDepth;
 
     public Trainer(
-            final InfoGain calculator,
+            final MutualInformation calculator,
             final int maxDepth
     ) {
         this.calculator = calculator;
