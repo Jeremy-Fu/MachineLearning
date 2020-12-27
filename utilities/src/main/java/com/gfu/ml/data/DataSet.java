@@ -81,6 +81,15 @@ public class DataSet {
         return attributeNames[attributes[idx]];
     }
 
+    public String[] attrNames() {
+        final int attrCount = getAttributesCount();
+        final String[] ans = new String[attrCount];
+        for (int i = 0; i < attrCount; i++) {
+            ans[i] = getAttribute(i);
+        }
+        return ans;
+    }
+
     public int attributesCount() {
         return attributes.length;
     }
@@ -99,6 +108,24 @@ public class DataSet {
         final int rowIdx = rows[row];
         final int outIdx = matrix[0].length-1;
         return matrix[rowIdx][outIdx];
+    }
+
+    public boolean[] outValues() {
+        final int rows = getRowsCount();
+        final boolean[] outs = new boolean[rows];
+        for (int i = 0; i < rows; i++) {
+            outs[i] = outValue(i);
+        }
+        return outs;
+    }
+
+    public boolean[] attrValues(final int row) {
+        final int attrCount = getAttributesCount();
+        final boolean[] ans = new boolean[attrCount];
+        for (int i = 0; i < attrCount; i++) {
+            ans[i] = attrValue(row, i);
+        }
+        return ans;
     }
 
     public DataSet[] split(final int attrIdx) {

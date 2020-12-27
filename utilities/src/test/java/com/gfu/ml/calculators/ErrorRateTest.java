@@ -14,12 +14,12 @@ public class ErrorRateTest {
     public void testGetErrorRate() {
         final int accurate = 15;
         final int errors = 13;
-        final ErrorRate errorRate = new ErrorRate(1);
+        final ErrorRate errorRate = new ErrorRate();
         for (int i = 0; i < accurate; i++) {
-            errorRate.digest(1);
+            errorRate.digest(true, true);
         }
         for (int i = 0; i < errors; i++) {
-            errorRate.digest(0);
+            errorRate.digest(true, false);
         }
 
         assertEquals(0.464285714286, errorRate.getErrorRate(), DELTA);

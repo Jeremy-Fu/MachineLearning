@@ -1,6 +1,9 @@
 package com.gfu.ml.model;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
@@ -15,6 +18,17 @@ public class DecisionTree {
 
     public DTBinaryNode getRoot() {
         return root;
+    }
+
+    public boolean predict(final String[] attrNames, final boolean[] attrValues) {
+        checkArgument(
+                attrNames.length == attrValues.length,
+                "The length attrNames must equal to the length of attrValues.");
+        final Map<String, Boolean>  map = new HashMap<>();
+        for (int i = 0; i < attrNames.length; i++) {
+            map.put(attrNames[i], attrValues[i]);
+        }
+        return search(map, root);
     }
 
     public boolean predict(final Map<String, Boolean> attributes) {

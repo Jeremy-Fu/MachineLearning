@@ -5,25 +5,17 @@ package com.gfu.ml.calculators;
  */
 public class ErrorRate {
 
-    private final int expectation;
-    private int accurate;
+    private int count;
     private int errors;
 
-    public ErrorRate(final int expectation) {
-        this.expectation = expectation;
-    }
-
-    public ErrorRate digest(final int label) {
-        if (label == expectation) {
-            accurate++;
-        } else {
-            errors++;
-        }
+    public ErrorRate digest(final boolean expectation, final boolean prediction) {
+        if (expectation != prediction) errors++;
+        count++;
         return this;
     }
 
     public double getErrorRate() {
-        return ((double) errors) / (double)(accurate + errors);
+        return ((double) errors) / (double)(count);
     }
 
 }
