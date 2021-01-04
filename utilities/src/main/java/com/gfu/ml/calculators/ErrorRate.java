@@ -14,6 +14,12 @@ public class ErrorRate {
         return this;
     }
 
+    public ErrorRate digest(final int expectation, final int prediction) {
+        if (expectation != prediction) errors++;
+        count++;
+        return this;
+    }
+
     public double getErrorRate() {
         return ((double) errors) / (double)(count);
     }
