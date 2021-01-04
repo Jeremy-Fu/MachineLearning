@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'machine-learning'
-include('utilities', 'decision-trees', 'logistic-regression')
+include('utilities', 'decision-trees', 'logistic-regression', "neural-networks")
