@@ -18,19 +18,19 @@ import java.util.Properties;
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
  */
-public class TrainLettersRecognitionApp {
+public class TrainLettersRecognitionMain {
 
-    private static final Logger logger = LogManager.getLogger(TrainLettersRecognitionApp.class);
+    private static final Logger logger = LogManager.getLogger(TrainLettersRecognitionMain.class);
     private static final HelpFormatter formatter = new HelpFormatter();
 
     private final AnnotationConfigApplicationContext context;
 
     public static void main(final String[] args) {
-        final int code = new TrainLettersRecognitionApp().run(args);
+        final int code = new TrainLettersRecognitionMain().run(args);
         System.exit(code);
     }
 
-    public TrainLettersRecognitionApp() {
+    public TrainLettersRecognitionMain() {
         this.context = new AnnotationConfigApplicationContext();
     }
 
@@ -39,7 +39,10 @@ public class TrainLettersRecognitionApp {
         try {
             final CommandLine cli = new DefaultParser().parse(opts, args);
             configureProperties(cli);
+            context.register(LettersRecognitionConfiguration.class);
             context.refresh();
+            final TrainTask trainTask = context.getBean(TrainTask.class);
+            trainTask.train();
         } catch (final ParseException ex) {
             formatter.printHelp("gradle run TrainLettersRecognitionApp", opts);
             return -1;
