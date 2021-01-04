@@ -28,4 +28,5 @@ hs_err_pid*
 # Ignore Gradle build output directory
 build
 
-# Ignore the dataset
+# Ignore the dataseta
+nn_data
