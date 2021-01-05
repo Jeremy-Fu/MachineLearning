@@ -2,7 +2,7 @@ package com.gfu.ml.app;
 
 import com.gfu.ml.nns.IOHelper;
 import com.gfu.ml.nns.IOHelper.DataWrapper;
-import org.ejml.simple.SimpleMatrix;
+import com.gfu.ml.sgd.SGDOptimization;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,13 +31,13 @@ public class LettersRecognitionConfiguration {
     }
 
     @Bean
-    public TrainTask trainTask(
+    public SGDOptimization trainTask(
             @Qualifier("train") final DataWrapper trainData,
             @Value("${num_epoch}") final int numEpoch,
             @Value("${hidden_units}") final int hiddenUnits,
             @Value("${init_flag}") final int initFlag
     ) {
-        return new TrainTask(trainData.getFeatures(), trainData.getLabels(), hiddenUnits, numEpoch, initFlag);
+        return new SGDOptimization(trainData.getFeatures(), trainData.getLabels(), hiddenUnits, numEpoch, initFlag);
     }
 
 }

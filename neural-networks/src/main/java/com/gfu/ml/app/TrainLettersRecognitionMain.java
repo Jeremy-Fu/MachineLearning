@@ -1,5 +1,6 @@
 package com.gfu.ml.app;
 
+import com.gfu.ml.sgd.SGDOptimization;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -41,8 +42,8 @@ public class TrainLettersRecognitionMain {
             configureProperties(cli);
             context.register(LettersRecognitionConfiguration.class);
             context.refresh();
-            final TrainTask trainTask = context.getBean(TrainTask.class);
-            trainTask.train();
+            final SGDOptimization sgdOptimization = context.getBean(SGDOptimization.class);
+            sgdOptimization.train();
         } catch (final ParseException ex) {
             formatter.printHelp("gradle run TrainLettersRecognitionApp", opts);
             return -1;

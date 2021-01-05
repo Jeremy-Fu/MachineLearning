@@ -1,6 +1,5 @@
-package com.gfu.ml.app;
+package com.gfu.ml.sgd;
 
-import com.gfu.ml.nns.IOHelper.DataWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ejml.simple.SimpleMatrix;
@@ -10,9 +9,9 @@ import static java.lang.String.format;
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
  */
-public class TrainTask {
+public class SGDOptimization {
 
-    private static final Logger logger = LogManager.getLogger(TrainTask.class);
+    private static final Logger logger = LogManager.getLogger(SGDOptimization.class);
 
     private final SimpleMatrix trainFeatures;
     private final SimpleMatrix trainLabels;
@@ -20,7 +19,7 @@ public class TrainTask {
     private final int numEpoch;
     private final int initialFlag;
 
-    public TrainTask(
+    public SGDOptimization(
             final SimpleMatrix trainFeatures,
             final SimpleMatrix trainLabels,
             final int hiddenUnits,
