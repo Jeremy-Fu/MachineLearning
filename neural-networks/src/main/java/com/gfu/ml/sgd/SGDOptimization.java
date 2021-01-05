@@ -10,6 +10,7 @@ import org.ejml.simple.SimpleMatrix;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 
 /**
@@ -24,11 +25,12 @@ public class SGDOptimization {
     private final int hiddenUnits;
     private final int numEpoch;
     private final int initialFlag;
+    private final Map<Double, SimpleMatrix> ystarMatrix;
 
     private final ForwardComputation forwardComputation;
     private final BackwardComputation backwardComputation;
 
-    private final int K = 6; // num of distinct labels;
+    private final int K = 10; // num of distinct labels;
 
     public SGDOptimization(
             final SimpleMatrix trainFeatures,
@@ -47,6 +49,7 @@ public class SGDOptimization {
         this.forwardComputation = forwardComputation;
         this.backwardComputation = backwardComputation;
 
+        ystarMatrix = init();
     }
 
     public SimpleMatrix train() {
@@ -67,7 +70,7 @@ public class SGDOptimization {
         for (int epoch = 0; epoch < numEpoch; epoch++) {
             for (int i = 0; i < trainFeatures.numRows(); i++) {
                 final ForwardComputationResult result = forwardComputation.compute(trainFeatures.rows(i, i+1), alpha, beta);
-//                backwardComputation.compute();
+                backwardComputation.compute(getLabel(i), result.getYHat());
             }
         }
         return null;
@@ -86,17 +89,20 @@ public class SGDOptimization {
         return new SimpleMatrix(hiddenUnits+1, K);
     }
 
-    private Map<Integer, SimpleMatrix> init() {
-        final Map<Integer, SimpleMatrix> memo = new HashMap<>(K);
+    private Map<Double, SimpleMatrix> init() {
+        final Map<Double, SimpleMatrix> memo = new HashMap<>(K);
         for (int i = 0; i < K; i++) {
             final SimpleMatrix value = new SimpleMatrix(1, K);
             value.set(0, i);
+            memo.put((double)i, value);
         }
         return memo;
     }
 
     private SimpleMatrix getLabel(final int i) {
-        return null;
+        final double ystar = trainLabels.get(i, 0);
+        checkState(ystar >= 0 && ystar < K);
+        return ystarMatrix.get(trainLabels.get(i, 0));
     }
 
 

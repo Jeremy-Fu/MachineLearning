@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.ejml.simple.SimpleMatrix;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 
 /**
@@ -29,19 +28,19 @@ public class BackwardComputation {
         checkArgument(1 == ystar.numRows());
         checkArgument(1 == yhat.numRows());
         checkArgument(ystar.numCols() == yhat.numCols());
-        final SimpleMatrix d_yhat = yhat.invert().transpose().mult(ystar).diag();
-        if (sanity) checkDYhat(d_yhat, ystar, yhat);
+        final SimpleMatrix dYhat = derivativeYhat(ystar, yhat);
     }
 
-    private void checkDYhat(
-            final SimpleMatrix actual,
+    private SimpleMatrix derivativeYhat(
             final SimpleMatrix ystar,
             final SimpleMatrix yhat
     ) {
+        final SimpleMatrix ans = new SimpleMatrix(1, ystar.numCols());
         for (int j = 0; j < ystar.numCols(); j++) {
-            final double expected = ystar.get(0, j) / yhat.get(0, j);
-            checkState(expected == actual.get(0, j));
+            final double derivative = ystar.get(0, j) / yhat.get(0, j);
+            ans.set(0, j, derivative);
         }
+        return ans;
     }
 
 
