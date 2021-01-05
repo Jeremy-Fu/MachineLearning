@@ -1,7 +1,7 @@
 package com.gfu.ml.app;
 
-import com.gfu.ml.nns.IOHelper;
-import com.gfu.ml.nns.IOHelper.DataWrapper;
+import com.gfu.ml.utilities.IOHelper;
+import com.gfu.ml.utilities.IOHelper.DataWrapper;
 import com.gfu.ml.sgd.SGDOptimization;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

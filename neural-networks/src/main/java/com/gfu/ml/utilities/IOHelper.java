@@ -1,4 +1,4 @@
-package com.gfu.ml.nns;
+package com.gfu.ml.utilities;
 
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.context.annotation.Configuration;
