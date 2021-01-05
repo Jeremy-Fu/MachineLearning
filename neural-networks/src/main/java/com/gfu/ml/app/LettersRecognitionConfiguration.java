@@ -1,5 +1,6 @@
 package com.gfu.ml.app;
 
+import com.gfu.ml.nns.BackwardComputation;
 import com.gfu.ml.nns.ForwardComputation;
 import com.gfu.ml.utilities.IOHelper;
 import com.gfu.ml.utilities.IOHelper.DataWrapper;
@@ -37,14 +38,31 @@ public class LettersRecognitionConfiguration {
             @Value("${num_epoch}") final int numEpoch,
             @Value("${hidden_units}") final int hiddenUnits,
             @Value("${init_flag}") final int initFlag,
-            final ForwardComputation forwardComputation
+            final ForwardComputation forwardComputation,
+            final BackwardComputation backwardComputation
     ) {
-        return new SGDOptimization(trainData.getFeatures(), trainData.getLabels(), hiddenUnits, numEpoch, initFlag, forwardComputation);
+        return new SGDOptimization(
+                trainData.getFeatures(),
+                trainData.getLabels(),
+                hiddenUnits,
+                numEpoch,
+                initFlag,
+                forwardComputation,
+                backwardComputation);
     }
 
     @Bean
-    public ForwardComputation forwardComputation() {
-        return new ForwardComputation();
+    public ForwardComputation forwardComputation(
+            @Value("${sanity}") final boolean sanity
+    ) {
+        return new ForwardComputation(sanity);
+    }
+
+    @Bean
+    public BackwardComputation backwardComputation(
+            @Value("${sanity}") final boolean sanity
+    ) {
+        return new BackwardComputation(sanity);
     }
 
 }

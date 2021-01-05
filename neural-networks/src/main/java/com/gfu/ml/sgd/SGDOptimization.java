@@ -1,10 +1,14 @@
 package com.gfu.ml.sgd;
 
+import com.gfu.ml.nns.BackwardComputation;
 import com.gfu.ml.nns.ForwardComputation;
 import com.gfu.ml.nns.ForwardComputation.ForwardComputationResult;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.ejml.simple.SimpleMatrix;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.String.format;
 
@@ -22,6 +26,8 @@ public class SGDOptimization {
     private final int initialFlag;
 
     private final ForwardComputation forwardComputation;
+    private final BackwardComputation backwardComputation;
+
     private final int K = 6; // num of distinct labels;
 
     public SGDOptimization(
@@ -30,7 +36,8 @@ public class SGDOptimization {
             final int hiddenUnits,
             final int numEpoch,
             final int initialFlag,
-            final ForwardComputation forwardComputation
+            final ForwardComputation forwardComputation,
+            final BackwardComputation backwardComputation
     ) {
         this.trainFeatures = trainFeatures;
         this.trainLabels = trainLabels;
@@ -38,6 +45,8 @@ public class SGDOptimization {
         this.numEpoch = numEpoch;
         this.initialFlag = initialFlag;
         this.forwardComputation = forwardComputation;
+        this.backwardComputation = backwardComputation;
+
     }
 
     public SimpleMatrix train() {
@@ -55,9 +64,10 @@ public class SGDOptimization {
 
         SimpleMatrix alpha = initAlpha();
         SimpleMatrix beta = initBeta();
-        for (int i = 0; i < numEpoch; i++) {
-            for (int ii = 0; ii < trainFeatures.numRows(); ii++) {
-                final ForwardComputationResult result = forwardComputation.compute(trainFeatures.rows(ii, ii+1), alpha, beta);
+        for (int epoch = 0; epoch < numEpoch; epoch++) {
+            for (int i = 0; i < trainFeatures.numRows(); i++) {
+                final ForwardComputationResult result = forwardComputation.compute(trainFeatures.rows(i, i+1), alpha, beta);
+//                backwardComputation.compute();
             }
         }
         return null;
@@ -73,7 +83,20 @@ public class SGDOptimization {
     }
 
     private SimpleMatrix initBeta() {
-        return new SimpleMatrix(hiddenUnits, K);
+        return new SimpleMatrix(hiddenUnits+1, K);
+    }
+
+    private Map<Integer, SimpleMatrix> init() {
+        final Map<Integer, SimpleMatrix> memo = new HashMap<>(K);
+        for (int i = 0; i < K; i++) {
+            final SimpleMatrix value = new SimpleMatrix(1, K);
+            value.set(0, i);
+        }
+        return memo;
+    }
+
+    private SimpleMatrix getLabel(final int i) {
+        return null;
     }
 
 

@@ -61,6 +61,7 @@ public class TrainLettersRecognitionMain {
         opts.addOption(Option.builder("hidden_units").hasArg().build());
         opts.addOption(Option.builder("init_flag").hasArg().build());
         opts.addOption(Option.builder("learning_rate").hasArg().build());
+        opts.addOption(Option.builder("sanity").hasArg(false).build());
 
         return opts;
     }
@@ -72,6 +73,7 @@ public class TrainLettersRecognitionMain {
         properties.put("hidden_units", cli.hasOption("hidden_units") ? cli.getOptionValue("hidden_units") : 10);
         properties.put("init_flag", cli.hasOption("init_flag") ? cli.getOptionValue("init_flag") : 1);
         properties.put("learning_rate", cli.hasOption("learning_rate") ? cli.getOptionValue("learning_rate") : 0.1);
+        properties.put("sanity", cli.hasOption("sanity"));
 
         final ConfigurableEnvironment environment = context.getEnvironment();
         final MutablePropertySources propertySources = environment.getPropertySources();

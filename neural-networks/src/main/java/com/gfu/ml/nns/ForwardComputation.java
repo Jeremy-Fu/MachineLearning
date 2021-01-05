@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.ejml.simple.SimpleMatrix;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
+import static java.lang.String.format;
 
 /**
  * @author Geng Fu (fugeng1991@hotmail.com)
@@ -13,17 +15,30 @@ public class ForwardComputation {
 
     private static final Logger logger = LogManager.getLogger(ForwardComputation.class);
 
+    private final SimpleMatrix interceptZ;
+    private final boolean sanity;
+
+    public ForwardComputation(
+            final boolean sanity
+    ) {
+        this.sanity = sanity;
+        this.interceptZ = new SimpleMatrix(1,1, true, new double[]{1});
+        logger.info(format("ForwardComputation has %s sanity check.", sanity ? "enabled" : "disabled"));
+    }
+
     public ForwardComputationResult compute(
-            final SimpleMatrix example,
-            final SimpleMatrix alpha, // M * D1
-            final SimpleMatrix beta // D1 * K
+            final SimpleMatrix example, // 1 * (M+1)
+            final SimpleMatrix alpha, // (M+1) * D1
+            final SimpleMatrix beta // (D1+1) * K
     ) {
         checkArgument(example.numRows() == 1,
                 "Under stochastic gradient descent, we should use one example at a time");
 
         final SimpleMatrix A = example.mult(alpha);
         final SimpleMatrix Z = sigmoid(A);
-        final SimpleMatrix B = Z.mult(beta);
+        final SimpleMatrix ZFold = interceptZ.concatColumns(Z);
+        if (sanity) check(Z, ZFold);
+        final SimpleMatrix B = ZFold.mult(beta);
         final SimpleMatrix yhat = softmax(B);
 
         return new ForwardComputationResult(A, Z, B, yhat);
@@ -38,6 +53,14 @@ public class ForwardComputation {
             }
         }
         return ans;
+    }
+
+    private void check(final SimpleMatrix Z, final SimpleMatrix ZFold) {
+        checkState(Z.numCols()+1 == ZFold.numCols());
+        checkState(ZFold.get(0,0) == 1);
+        for (int j = 1; j < ZFold.numCols(); j++) {
+            checkState(Z.get(0, j-1) == ZFold.get(0, j));
+        }
     }
 
     private double sigmoid(final double x) {
@@ -63,7 +86,7 @@ public class ForwardComputation {
         private final SimpleMatrix B;
         private final SimpleMatrix yhat;
 
-        public ForwardComputationResult(
+        private ForwardComputationResult(
                 final SimpleMatrix A,
                 final SimpleMatrix Z,
                 final SimpleMatrix B,
