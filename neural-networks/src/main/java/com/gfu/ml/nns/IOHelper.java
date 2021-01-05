@@ -1,12 +1,9 @@
 package com.gfu.ml.nns;
 
-import org.ejml.data.DMatrix;
-import org.ejml.ops.ReadMatrixCsv;
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +15,7 @@ import java.util.List;
 @Configuration
 public class IOHelper {
 
-    private static final int M = 128;
+    private static final int M = 129;  // including intercept term
 
     public static DataWrapper loadData(final String input) throws IOException {
         final BufferedReader in = new BufferedReader(new FileReader(input));
@@ -32,8 +29,9 @@ public class IOHelper {
 
             // process column[1-128] - features (pixels)
             final Double[] example = new Double[M];
-            for (int i = 0; i < example.length; i++) {
-                example[i] = Double.parseDouble(fields[i+1]);
+            example[0] = 1.0; // intercept term
+            for (int i = 1; i < fields.length; i++) {
+                example[i] = Double.parseDouble(fields[i]);
             }
             features.add(example);
         }
@@ -45,10 +43,10 @@ public class IOHelper {
         }
 
         final SimpleMatrix featureMatrix = new SimpleMatrix(features.size(), M);
-        for (int j = 0; j < features.size(); j++) {
-            final Double[] example = features.get(j);
-            for (int i = 0; i < M; i++) {
-                featureMatrix.set(j, i, example[i]);
+        for (int i = 0; i < features.size(); i++) {
+            final Double[] example = features.get(i);
+            for (int j = 0; j < M; j++) {
+                featureMatrix.set(i, j, example[j]);
             }
         }
 

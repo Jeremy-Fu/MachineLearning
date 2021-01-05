@@ -39,11 +39,13 @@ public class TrainTask {
                 "\t[# of hidden units]: %d\n" +
                 "\t[# of epoch]: %d\n" +
                 "\t[initial flag]: %s\n" +
-                "\t[total examples]: %d",
+                "\t[total examples]: %d\n" +
+                "\t[features]: %d",
                 hiddenUnits,
                 numEpoch,
                 interpret(initialFlag),
-                trainFeatures.numRows()));
+                trainFeatures.numRows(),
+                trainFeatures.numCols()-1));
         return null;
     }
 
