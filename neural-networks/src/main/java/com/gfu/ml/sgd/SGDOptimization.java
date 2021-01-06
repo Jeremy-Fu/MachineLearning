@@ -1,6 +1,7 @@
 package com.gfu.ml.sgd;
 
 import com.gfu.ml.nns.BackwardComputation;
+import com.gfu.ml.nns.BackwardComputation.BackwardComputationResult;
 import com.gfu.ml.nns.ForwardComputation;
 import com.gfu.ml.nns.ForwardComputation.ForwardComputationResult;
 import org.apache.logging.log4j.LogManager;
@@ -10,6 +11,7 @@ import org.ejml.simple.SimpleMatrix;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 
@@ -25,6 +27,7 @@ public class SGDOptimization {
     private final int hiddenUnits;
     private final int numEpoch;
     private final int initialFlag;
+    private final double eta; // learning rate
     private final Map<Double, SimpleMatrix> ystarMatrix;
 
     private final ForwardComputation forwardComputation;
@@ -38,6 +41,7 @@ public class SGDOptimization {
             final int hiddenUnits,
             final int numEpoch,
             final int initialFlag,
+            final double learningRate,
             final ForwardComputation forwardComputation,
             final BackwardComputation backwardComputation
     ) {
@@ -48,6 +52,7 @@ public class SGDOptimization {
         this.initialFlag = initialFlag;
         this.forwardComputation = forwardComputation;
         this.backwardComputation = backwardComputation;
+        this.eta = learningRate;
 
         ystarMatrix = init();
     }
@@ -70,7 +75,14 @@ public class SGDOptimization {
         for (int epoch = 0; epoch < numEpoch; epoch++) {
             for (int i = 0; i < trainFeatures.numRows(); i++) {
                 final ForwardComputationResult result = forwardComputation.compute(trainFeatures.rows(i, i+1), alpha, beta);
-                backwardComputation.compute(getLabel(i), result.getYHat());
+                final BackwardComputationResult backResult = backwardComputation.compute(getLabel(i), result.getYHat(), result.getZ(), beta, trainFeatures.rows(i, i+1));
+                final SimpleMatrix dAlpha = backResult.getdAlpha();
+                final SimpleMatrix dBeta = backResult.getdBeta();
+
+                checkArgument(alpha.numRows() == dAlpha.numRows() && alpha.numCols() == dAlpha.numCols());
+                checkArgument(beta.numRows() == dBeta.numRows() && beta.numCols() == dBeta.numCols());
+                alpha = alpha.minus(dAlpha.scale(eta));
+                beta = beta.minus(dBeta.scale(eta));
             }
         }
         return null;

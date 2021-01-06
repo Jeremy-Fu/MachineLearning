@@ -38,6 +38,7 @@ public class LettersRecognitionConfiguration {
             @Value("${num_epoch}") final int numEpoch,
             @Value("${hidden_units}") final int hiddenUnits,
             @Value("${init_flag}") final int initFlag,
+            @Value("${learning_rate}") final double eta,
             final ForwardComputation forwardComputation,
             final BackwardComputation backwardComputation
     ) {
@@ -47,6 +48,7 @@ public class LettersRecognitionConfiguration {
                 hiddenUnits,
                 numEpoch,
                 initFlag,
+                eta,
                 forwardComputation,
                 backwardComputation);
     }

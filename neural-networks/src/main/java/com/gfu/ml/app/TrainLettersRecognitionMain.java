@@ -70,7 +70,7 @@ public class TrainLettersRecognitionMain {
         final Properties properties = new Properties();
         properties.put("input_dir", cli.getOptionValue("input_dir"));
         properties.put("num_epoch", cli.hasOption("num_epoch") ? cli.getOptionValue("num_epoch") : 10);
-        properties.put("hidden_units", cli.hasOption("hidden_units") ? cli.getOptionValue("hidden_units") : 10);
+        properties.put("hidden_units", cli.hasOption("hidden_units") ? cli.getOptionValue("hidden_units") : 100);
         properties.put("init_flag", cli.hasOption("init_flag") ? cli.getOptionValue("init_flag") : 1);
         properties.put("learning_rate", cli.hasOption("learning_rate") ? cli.getOptionValue("learning_rate") : 0.1);
         properties.put("sanity", cli.hasOption("sanity"));
